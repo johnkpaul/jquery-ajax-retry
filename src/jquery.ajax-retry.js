@@ -14,6 +14,10 @@
     $.ajax = function(){
       var deferred = tempAjax.apply({},arguments);
       deferred.retry = passThroughToPipe;
+      deferred.withTimeout = function(timeout){
+        this.timeout = timeout;
+        return this;
+      };
       return deferred;
     };
 

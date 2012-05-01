@@ -91,4 +91,34 @@
     this.requests[1].respond(400, { "Content-Type": "application/json" },
                                  '{ "id": 12, "comment": "error!" }');
   });
+
+  module('jQuery retry uses timeout value', {
+    setup: function() {
+      this.xhr = sinon.useFakeXMLHttpRequest();
+      var requests = this.requests = [];
+      this.xhr.onCreate = function (xhr) {
+            requests.push(xhr);
+        };
+      this.clock = sinon.useFakeTimers();
+    },
+    teardown: function(){
+      this.xhr.restore(); 
+      this.clock.restore();
+    }
+  });
+
+  asyncTest('timeout is waited before next retry', 2, function() {
+    
+    var def = $.post("/test",{});
+    def.withTimeout(2000).retry(2);
+    ok(this.requests.length === 1);
+    this.clock.tick(2001);
+    ok(this.requests.length === 2);
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+    this.requests[1].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+    start();
+  });
+  
 }(jQuery));
