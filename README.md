@@ -15,16 +15,21 @@ In your web page:
 <script src="dist/jquery.ajax-retry.min.js"></script>
 <script>
 jQuery(function($) {
-  $.awesome(); // "awesome"
+  //this will try the ajax call three times in total 
+  //if there is no error, the success callbacks will be fired immediately
+  //if there is an error after three attempts, the error callback will be called
+
+  $.ajax(options).retry(3).then(function(){
+    alert("success!");
+  });  
+
+  //this has the same sematics as above, except will wait 3 seconds between attempts
+  $.ajax(options).withTimeout(3000).retry(3).then(function(){
+    alert("success!");
+  });  
 });
 </script>
 ```
-
-## Documentation
-_(Coming soon)_
-
-## Examples
-_(Coming soon)_
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
