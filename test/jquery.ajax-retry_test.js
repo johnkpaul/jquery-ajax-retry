@@ -107,18 +107,15 @@
     }
   });
 
-  asyncTest('timeout is waited before next retry', 2, function() {
-    
+  test('timeout is waited before next retry', 3, function() {
     var def = $.post("/test",{});
     def.withTimeout(2000).retry(2);
     ok(this.requests.length === 1);
-    this.clock.tick(2001);
-    ok(this.requests.length === 2);
     this.requests[0].respond(400, { "Content-Type": "application/json" },
                                  '{ "id": 12, "comment": "error!" }');
-    this.requests[1].respond(400, { "Content-Type": "application/json" },
-                                 '{ "id": 12, "comment": "error!" }');
-    start();
+    ok(this.requests.length === 1);
+    this.clock.tick(2001);
+    ok(this.requests.length === 2);
   });
   
 }(jQuery));

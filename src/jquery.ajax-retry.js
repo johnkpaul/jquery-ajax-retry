@@ -27,12 +27,29 @@
     }
 
     function retryIt(times){
+      var self = this;
       return function(deferred,status,msg){
+        var ajaxOptions = this; 
+        var def = new $.Deferred();
+
+        if(self.timeout !== undefined){
+          var timeoutDeferred = new $.Deferred();
+
+          $.when(timeoutDeferred).then(function(timeout){
+            def.pipe($.ajax(ajaxOptions).pipe(null, retryIt.call(self,times - 1)));
+          });
+
+          setTimeout(function(){
+            timeoutDeferred.resolve();
+          }, this.timeout);
+
+          return def;
+        }
+
         if(times > 1){
           return $.ajax(this).pipe(null, retryIt(times - 1));
         }     
 
-        var def = new $.Deferred();
         def.rejectWith(this,arguments);
         return def;
       };  
