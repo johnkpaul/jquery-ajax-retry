@@ -117,5 +117,16 @@
     this.clock.tick(2001);
     ok(this.requests.length === 2);
   });
+
+  test('retry does not happen, if timeout has not been met', 3, function() {
+    var def = $.post("/test",{});
+    def.withTimeout(2000).retry(2);
+    ok(this.requests.length === 1);
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+    ok(this.requests.length === 1);
+    this.clock.tick(1999);
+    ok(this.requests.length === 1);
+  });
   
 }(jQuery));

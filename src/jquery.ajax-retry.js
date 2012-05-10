@@ -41,7 +41,7 @@
 
           setTimeout(function(){
             timeoutDeferred.resolve();
-          }, this.timeout);
+          }, self.timeout);
 
           return def;
         }
