@@ -107,15 +107,21 @@
     }
   });
 
-  test('timeout is waited before next retry', 3, function() {
+  test('timeout is waited before next retry', 4, function() {
     var def = $.post("/test",{});
-    def.withTimeout(2000).retry(2);
+
+    def.withTimeout(2000).retry(2).done(function(data) {
+      ok(data.id === 12);
+    });
+
     ok(this.requests.length === 1);
     this.requests[0].respond(400, { "Content-Type": "application/json" },
-                                 '{ "id": 12, "comment": "error!" }');
+                                 '{ "id": 11, "comment": "error!" }');
     ok(this.requests.length === 1);
-    this.clock.tick(2001);
+    this.clock.tick(2000);
     ok(this.requests.length === 2);
+    this.requests[1].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
   });
 
   test('retry does not happen, if timeout has not been met', 3, function() {
