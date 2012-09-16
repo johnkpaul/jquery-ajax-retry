@@ -5,8 +5,8 @@ Retry ajax calls using the deferred API
 ## Getting Started
 Download the [production version][min] or the [development version][max].
 
-[min]: https://raw.github.com/johnkpaul/jquery.ajax-retry/master/dist/jquery.ajax-retry.min.js
-[max]: https://raw.github.com/johnkpaul/jquery.ajax-retry/master/dist/jquery.ajax-retry.js
+[min]: https://raw.github.com/johnkpaul/jquery-ajax-retry/master/dist/jquery.ajax-retry.min.js
+[max]: https://raw.github.com/johnkpaul/jquery-ajax-retry/master/dist/jquery.ajax-retry.js
 
 In your web page:
 
