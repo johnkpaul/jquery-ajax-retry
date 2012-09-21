@@ -19,12 +19,12 @@ jQuery(function($) {
   //if there is no error, the success callbacks will be fired immediately
   //if there is an error after three attempts, the error callback will be called
 
-  $.ajax(options).retry(3).then(function(){
+  $.ajax(options).retry({times:3}).then(function(){
     alert("success!");
   });  
 
   //this has the same sematics as above, except will wait 3 seconds between attempts
-  $.ajax(options).withTimeout(3000).retry(3).then(function(){
+  $.ajax(options).retry({times:3, timeout:3000}).then(function(){
     alert("success!");
   });  
 });
