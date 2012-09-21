@@ -59,7 +59,7 @@
 
   asyncTest('ajax Deferred tries again if needed', 1, function() {
     var def = $.post("/test",{});
-    def.retry(2).then(function(data){
+    def.retry({times:2}).then(function(data){
       ok(data.id === 12);
       start();
     });
@@ -71,7 +71,7 @@
 
   asyncTest('ajax Deferred tries only once if failing', 0, function() {
     var def = $.post("/test",{});
-    def.retry(2).fail(function(){
+    def.retry({times:2}).fail(function(){
       start();
     });
     this.requests[0].respond(400, { "Content-Type": "application/json" },
@@ -82,7 +82,7 @@
 
   asyncTest('ajax Deferred gets correct parameters to fail callback', 1, function() {
     var def = $.post("/test",{});
-    def.retry(2).fail(function(deferred, status, msg){
+    def.retry({times:2}).fail(function(deferred, status, msg){
       ok(status === "error");
       start();
     });
@@ -95,7 +95,7 @@
   test('data is taken from successful response ', 1, function() {
     var def = $.post("/test",{});
 
-    def.retry(2).done(function(data) {
+    def.retry({times:2}).done(function(data) {
       ok(data.id === 12);
     });
 
@@ -126,7 +126,7 @@
   test('timeout is waited before next retry', 3, function() {
     var def = $.post("/test",{});
 
-    def.withTimeout(2000).retry(2);
+    def.retry({times:2, timeout:2000});
 
     ok(this.requests.length === 1);
     this.requests[0].respond(400, { "Content-Type": "application/json" },
@@ -142,7 +142,7 @@
 
   test('retry does not happen, if timeout has not been met', 3, function() {
     var def = $.post("/test",{});
-    def.withTimeout(2000).retry(2);
+    def.retry({times:2, timeout:2000});
     ok(this.requests.length === 1);
     this.requests[0].respond(400, { "Content-Type": "application/json" },
                                  '{ "id": 12, "comment": "error!" }');

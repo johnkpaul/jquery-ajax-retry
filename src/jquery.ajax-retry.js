@@ -10,12 +10,11 @@
 
   // enhance all ajax requests with our retry API
   $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-    jqXHR.retry = function(times){
-      return this.pipe(null, pipeFailRetry(this, times));
-    };
-    jqXHR.withTimeout = function(timeout){
-      this.timeout = timeout;
-      return this;
+    jqXHR.retry = function(opts){
+      if(opts.timeout){
+        this.timeout = opts.timeout;
+      }
+      return this.pipe(null, pipeFailRetry(this, opts.times));
     };
   });
 
