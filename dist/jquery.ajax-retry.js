@@ -1,4 +1,4 @@
-/*! jQuery Ajax Retry - v0.1.1 - 2012-09-16
+/*! jQuery Ajax Retry - v0.2.0 - 2012-09-21
 * https://github.com/johnkpaul/jquery-ajax-retry
 * Copyright (c) 2012 John Paul; Licensed MIT */
 
@@ -6,12 +6,11 @@
 
   // enhance all ajax requests with our retry API
   $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-    jqXHR.retry = function(times){
-      return this.pipe(null, pipeFailRetry(this, times));
-    };
-    jqXHR.withTimeout = function(timeout){
-      this.timeout = timeout;
-      return this;
+    jqXHR.retry = function(opts){
+      if(opts.timeout){
+        this.timeout = opts.timeout;
+      }
+      return this.pipe(null, pipeFailRetry(this, opts.times));
     };
   });
 
