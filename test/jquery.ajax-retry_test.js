@@ -92,6 +92,22 @@
                                  '{ "id": 12, "comment": "error!" }');
   });
 
+  test('data is taken from successful response ', 1, function() {
+    var def = $.post("/test",{});
+
+    def.retry(2).done(function(data) {
+      ok(data.id === 12);
+    });
+
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 11, "comment": "error!" }');
+
+
+    this.requests[1].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+  });
+  
+
   module('jQuery retry uses timeout value', {
     setup: function() {
       this.xhr = sinon.useFakeXMLHttpRequest();
@@ -107,18 +123,18 @@
     }
   });
 
-  test('timeout is waited before next retry', 4, function() {
+  test('timeout is waited before next retry', 3, function() {
     var def = $.post("/test",{});
 
-    def.withTimeout(2000).retry(2).done(function(data) {
-      ok(data.id === 12);
-    });
+    def.withTimeout(2000).retry(2);
 
     ok(this.requests.length === 1);
     this.requests[0].respond(400, { "Content-Type": "application/json" },
                                  '{ "id": 11, "comment": "error!" }');
     ok(this.requests.length === 1);
+
     this.clock.tick(2000);
+
     ok(this.requests.length === 2);
     this.requests[1].respond(200, { "Content-Type": "application/json" },
                                  '{ "id": 12, "comment": "Hey there" }');
@@ -134,5 +150,5 @@
     this.clock.tick(1999);
     ok(this.requests.length === 1);
   });
-  
+
 }(jQuery));
