@@ -1,4 +1,4 @@
-/*! jQuery Ajax Retry - v0.2.0 - 2012-09-21
+/*! jQuery Ajax Retry - v0.2.0 - 2012-09-28
 * https://github.com/johnkpaul/jquery-ajax-retry
 * Copyright (c) 2012 John Paul; Licensed MIT */
 
@@ -25,7 +25,7 @@
       // whenever we do make this request, pipe its output to our deferred
       function nextRequest() {
         $.ajax(ajaxOptions)
-          .retry(times-1)
+          .retry({times:times-1})
           .pipe(output.resolve, output.reject);
       }
 
