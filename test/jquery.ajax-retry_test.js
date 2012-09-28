@@ -64,8 +64,23 @@
       start();
     });
     this.requests[0].respond(400, { "Content-Type": "application/json" },
-                                 '{ "id": 12, "comment": "error!" }');
+                                 '{ "id": 13, "comment": "error!" }');
     this.requests[1].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+  });
+
+  asyncTest('ajax Deferred tries again if needed', 1, function() {
+    var def = $.post("/test",{});
+    def.retry({times:3}).then(function(data){
+      ok(data.id === 12);
+      start();
+    });
+
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 13, "comment": "error!" }');
+    this.requests[1].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 13, "comment": "error!" }');
+    this.requests[2].respond(200, { "Content-Type": "application/json" },
                                  '{ "id": 12, "comment": "Hey there" }');
   });
 
