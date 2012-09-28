@@ -166,4 +166,16 @@
     ok(this.requests.length === 1);
   });
 
+  test('data is taken from successful response when using timeout option', 1, function() {
+    var def = $.post("/test",{});
+    def.retry({times:2, timeout:2000}).done(function(data) {
+      ok(data.id === 12);
+    });
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 13, "comment": "error!" }');
+    this.clock.tick(2000);
+    this.requests[1].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+  });
+
 }(jQuery));
