@@ -178,4 +178,44 @@
                                  '{ "id": 12, "comment": "error!" }');
   });
 
+  module('jQuery retry uses retry codes', {
+    setup: function() {
+      this.xhr = sinon.useFakeXMLHttpRequest();
+      var requests = this.requests = [];
+      this.xhr.onCreate = function (xhr) {
+            requests.push(xhr);
+        };
+    },
+    teardown: function(){
+      this.xhr.restore();
+    }
+  });
+
+  asyncTest('retry happens on provided status code', 1, function() {
+    var def = $.post("/test",{});
+    def.retry({times:2, statusCodes: [503]}).then(function(data){
+      ok(data.id === 12);
+      start();
+    });
+    this.requests[0].respond(503, { "Content-Type": "application/json" },
+                                 '{ "id": 13, "comment": "error!" }');
+    this.requests[1].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+  });
+
+  asyncTest('retry does not happen if status code is different from provided', 1, function() {
+    var def = $.post("/test",{
+      error: function(data) {
+        ok(true);
+        start();
+      }
+    });
+
+    def.retry({times:2, statusCodes:[503]});
+
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+
+  });
+
 }(jQuery));

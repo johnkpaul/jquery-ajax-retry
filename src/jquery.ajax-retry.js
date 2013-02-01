@@ -14,6 +14,9 @@
       if(opts.timeout){
         this.timeout = opts.timeout;
       }
+      if (opts.statusCodes) {
+        this.statusCodes = opts.statusCodes;
+      }
       return this.pipe(null, pipeFailRetry(this, opts.times));
     };
   });
@@ -33,7 +36,7 @@
           .pipe(output.resolve, output.reject);
       }
 
-      if(times > 1){
+      if (times > 1 && (!jqXHR.statusCodes || $.inArray(input.status, jqXHR.statusCodes) > -1)) {
         // time to make that next request...
         if(jqXHR.timeout !== undefined){
           setTimeout(nextRequest, jqXHR.timeout);
