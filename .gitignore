@@ -3,3 +3,6 @@
 *.gcno
 *.gcda
 *.gcov
+
+# npm modules
+node_modules
