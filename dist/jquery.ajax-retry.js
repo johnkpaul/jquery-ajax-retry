@@ -1,4 +1,4 @@
-/*! jQuery Ajax Retry - v0.2.2 - 2013-02-05
+/*! jQuery Ajax Retry - v0.2.3 - 2013-02-07
 * https://github.com/johnkpaul/jquery-ajax-retry
 * Copyright (c) 2013 John Paul; Licensed MIT */
 
@@ -9,6 +9,9 @@
     jqXHR.retry = function(opts){
       if(opts.timeout){
         this.timeout = opts.timeout;
+      }
+      if (opts.statusCodes) {
+        this.statusCodes = opts.statusCodes;
       }
       return this.pipe(null, pipeFailRetry(this, opts.times));
     };
@@ -29,7 +32,7 @@
           .pipe(output.resolve, output.reject);
       }
 
-      if(times > 1){
+      if (times > 1 && (!jqXHR.statusCodes || $.inArray(input.status, jqXHR.statusCodes) > -1)) {
         // time to make that next request...
         if(jqXHR.timeout !== undefined){
           setTimeout(nextRequest, jqXHR.timeout);

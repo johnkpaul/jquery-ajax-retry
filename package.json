@@ -2,7 +2,7 @@
   "name": "jquery.ajax-retry",
   "title": "jQuery Ajax Retry",
   "description": "Retry ajax calls using the deferred API",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "homepage": "https://github.com/johnkpaul/jquery-ajax-retry",
   "author": {
     "name": "John Paul",
