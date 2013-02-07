@@ -55,6 +55,28 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint qunit concat min');
+  grunt.registerTask('default', 'lint qunit concat min manifest');
 
+  grunt.registerTask( "manifest", function() {
+    var pkg = grunt.config( "pkg" );
+    grunt.file.write( "ajax-retry.jquery.json", JSON.stringify({
+      name: "ajax-retry",
+      title: pkg.title,
+      description: pkg.description,
+      keywords: pkg.keywords,
+      version: pkg.version,
+      author: pkg.author,
+      maintainers: pkg.maintainers,
+      licenses: pkg.licenses.map(function( license ) {
+        license.url = license.url.replace( "master", pkg.version );
+        return license;
+      }),
+      bugs: pkg.bugs,
+      homepage: pkg.homepage,
+      docs: pkg.homepage,
+      dependencies: {
+        jquery: ">=1.5"
+      }
+    }, null, "  " ) );
+  });
 };
