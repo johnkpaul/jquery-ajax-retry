@@ -1,0 +1,36 @@
+{
+  "name": "ajax-retry",
+  "title": "jQuery Ajax Retry",
+  "description": "Retry ajax calls using the deferred API",
+  "keywords": [
+    "ajax",
+    "retry"
+  ],
+  "version": "0.2.2",
+  "author": {
+    "name": "John Paul",
+    "email": "john@johnkpaul.com",
+    "url": "http://www.johnkpaul.com"
+  },
+  "maintainers": [
+    {
+      "name": "John Paul",
+      "email": "john@johnkpaul.com",
+      "url": "http://www.johnkpaul.com"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/johnkpaul/jquery-ajax-retry/blob/0.2.2/LICENSE-MIT"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/johnkpaul/jquery-ajax-retry/issues"
+  },
+  "homepage": "https://github.com/johnkpaul/jquery-ajax-retry",
+  "docs": "https://github.com/johnkpaul/jquery-ajax-retry",
+  "dependencies": {
+    "jquery": ">=1.5"
+  }
+}

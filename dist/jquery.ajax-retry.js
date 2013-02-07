@@ -1,6 +1,6 @@
-/*! jQuery Ajax Retry - v0.2.0 - 2012-09-28
+/*! jQuery Ajax Retry - v0.2.2 - 2013-02-05
 * https://github.com/johnkpaul/jquery-ajax-retry
-* Copyright (c) 2012 John Paul; Licensed MIT */
+* Copyright (c) 2013 John Paul; Licensed MIT */
 
 (function($) {
 
