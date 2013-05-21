@@ -17,12 +17,12 @@
       if (opts.statusCodes) {
         this.statusCodes = opts.statusCodes;
       }
-      return this.pipe(null, pipeFailRetry(this, opts.times));
+      return this.pipe(null, pipeFailRetry(this, opts.times, opts.timeout));
     };
   });
 
   // generates a fail pipe function that will retry `jqXHR` `times` more times
-  function pipeFailRetry(jqXHR, times){
+  function pipeFailRetry(jqXHR, times, timeout){
 
     // takes failure data as input, returns a new deferred
     return function(input, status, msg){
@@ -32,7 +32,7 @@
       // whenever we do make this request, pipe its output to our deferred
       function nextRequest() {
         $.ajax(ajaxOptions)
-          .retry({times:times-1})
+          .retry({times:times-1, timeout: timeout})
           .pipe(output.resolve, output.reject);
       }
 
