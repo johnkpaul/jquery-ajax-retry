@@ -17,12 +17,14 @@
       if (opts.statusCodes) {
         this.statusCodes = opts.statusCodes;
       }
-      return this.pipe(null, pipeFailRetry(this, opts.times, opts.timeout));
+      return this.pipe(null, pipeFailRetry(this, opts));
     };
   });
 
   // generates a fail pipe function that will retry `jqXHR` `times` more times
-  function pipeFailRetry(jqXHR, times, timeout){
+  function pipeFailRetry(jqXHR, opts){
+    var times = opts.times;
+    var timeout = opts.timeout;
 
     // takes failure data as input, returns a new deferred
     return function(input, status, msg){
