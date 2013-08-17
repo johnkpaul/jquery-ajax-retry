@@ -155,6 +155,31 @@
                                  '{ "id": 12, "comment": "Hey there" }');
   });
 
+  test('timeout is waited between multiple retries', 4, function() {
+    var def = $.post("/test",{});
+
+    def.retry({times:3, timeout:2000});
+
+    ok(this.requests.length === 1);
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 11, "comment": "error!" }');
+    ok(this.requests.length === 1);
+
+    this.clock.tick(2000);
+
+    ok(this.requests.length === 2);
+
+    this.requests[1].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 11, "comment": "error!" }');
+
+    this.clock.tick(2000);
+
+    ok(this.requests.length === 3);
+
+    this.requests[2].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+  });
+
   test('retry does not happen, if timeout has not been met', 3, function() {
     var def = $.post("/test",{});
     def.retry({times:2, timeout:2000});
