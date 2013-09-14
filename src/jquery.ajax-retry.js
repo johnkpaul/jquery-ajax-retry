@@ -25,6 +25,7 @@
   function pipeFailRetry(jqXHR, opts){
     var times = opts.times;
     var timeout = opts.timeout;
+    var callback = opts.callback;
 
     // takes failure data as input, returns a new deferred
     return function(input, status, msg){
@@ -33,8 +34,12 @@
 
       // whenever we do make this request, pipe its output to our deferred
       function nextRequest() {
+        if (callback) {
+          callback.call(ajaxOptions, input, status, msg);
+        }
+
         $.ajax(ajaxOptions)
-          .retry({times:times-1, timeout: timeout})
+          .retry({times:times-1, timeout: timeout, callback: callback})
           .pipe(output.resolve, output.reject);
       }
 

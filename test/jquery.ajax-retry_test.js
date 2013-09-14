@@ -242,5 +242,68 @@
                                  '{ "id": 12, "comment": "error!" }');
 
   });
+  
+  asyncTest('retry callback is called if specified', 1, function() {
+    
+    var def = $.post("/test", {});
+    
+    def.retry({ times: 2, callback: function(xhr) {
+      ok(xhr.status === 503);
+      start();
+    }});
+    
+    this.requests[0].respond(503, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+                                 
+    this.requests[1].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');                             
+  
+  });
+  
+  asyncTest('retry callback is called for all retries', 1, function() {
+    var def = $.post("/test", {}),
+      count = 0;
+    
+    def
+      .retry({ times: 3, callback: function(xhr, status) {
+        count++;
+      }})
+      .then(function() {
+        ok(count === 2);
+        start();
+      });
+    
+    this.requests[0].respond(503, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+                                 
+    this.requests[1].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+                                 
+    this.requests[2].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+  });
+  
+  asyncTest('retry callback is called only for retries', 1, function() {
+    var def = $.post("/test", {}),
+      count = 0;
+    
+    def
+      .retry({ times: 3, callback: function(xhr, status) {
+        count++;
+      }})
+      .fail(function() {
+        ok(count === 2);
+        start();
+      });
+    
+    this.requests[0].respond(503, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "error!" }');
+                                 
+    this.requests[1].respond(403, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+                                 
+    this.requests[2].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+  });
 
 }(jQuery));
