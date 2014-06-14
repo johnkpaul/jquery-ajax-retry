@@ -32,7 +32,7 @@
         };
     },
     teardown: function(){
-      this.xhr.restore(); 
+      this.xhr.restore();
     }
   });
 
@@ -121,7 +121,7 @@
     this.requests[1].respond(200, { "Content-Type": "application/json" },
                                  '{ "id": 12, "comment": "Hey there" }');
   });
-  
+
 
   module('jQuery retry uses timeout value', {
     setup: function() {
@@ -133,7 +133,7 @@
       this.clock = sinon.useFakeTimers();
     },
     teardown: function(){
-      this.xhr.restore(); 
+      this.xhr.restore();
       this.clock.restore();
     }
   });
@@ -201,6 +201,34 @@
     this.clock.tick(2000);
     this.requests[1].respond(200, { "Content-Type": "application/json" },
                                  '{ "id": 12, "comment": "error!" }');
+  });
+
+  test('retry-after http header (seconds) is used as timeout', 3, function() {
+    var def = $.post("/test",{});
+    def.retry({times:2, timeout:100});
+    ok(this.requests.length === 1);
+    this.requests[0].respond(400, {
+      "Content-Type": "application/json",
+      "Retry-After": "1"
+    }, '{ "id": 12, "comment": "error!" }');
+    this.clock.tick(200);
+    ok(this.requests.length === 1);
+    this.clock.tick(1001);
+    ok(this.requests.length === 2);
+  });
+
+  test('retry-after http header (HTTP-date) is used as timeout', 3, function() {
+    var def = $.post("/test",{});
+    def.retry({times:2, timeout:100});
+    ok(this.requests.length === 1);
+    this.requests[0].respond(400, {
+      "Content-Type": "application/json",
+      "Retry-After": new Date($.now() + 3000)
+    }, '{ "id": 12, "comment": "error!" }');
+    this.clock.tick(200);
+    ok(this.requests.length === 1);
+    this.clock.tick(3001);
+    ok(this.requests.length === 2);
   });
 
   module('jQuery retry uses retry codes', {
