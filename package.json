@@ -33,5 +33,6 @@
   "devDependencies": {
     "grunt": "~0.3.15"
   },
-  "keywords": [ "ajax", "retry" ]
+  "keywords": [ "ajax", "retry" ],
+  "main": "src/jquery.ajax-retry.js"
 }
