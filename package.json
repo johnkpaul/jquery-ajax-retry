@@ -9,11 +9,13 @@
     "email": "john@johnkpaul.com",
     "url": "http://www.johnkpaul.com"
   },
-  "maintainers": [{
-    "name": "John Paul",
-    "email": "john@johnkpaul.com",
-    "url": "http://www.johnkpaul.com"
-  }],
+  "maintainers": [
+    {
+      "name": "John Paul",
+      "email": "john@johnkpaul.com",
+      "url": "http://www.johnkpaul.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/johnkpaul/jquery-ajax-retry.git"
@@ -28,11 +30,19 @@
     }
   ],
   "dependencies": {
-    "jquery": "~1.5"
+    "jquery": "~1.5",
+    "grunt-contrib-qunit": "~0.5.1",
+    "grunt-contrib-concat": "~0.4.0"
   },
   "devDependencies": {
-    "grunt": "~0.3.15"
+    "grunt": "~0.4.5",
+    "load-grunt-tasks": "~0.5.0",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-contrib-jshint": "~0.10.0"
   },
-  "keywords": [ "ajax", "retry" ],
+  "keywords": [
+    "ajax",
+    "retry"
+  ],
   "main": "src/jquery.ajax-retry.js"
 }
