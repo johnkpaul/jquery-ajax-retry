@@ -29,8 +29,10 @@
       "url": "https://github.com/johnkpaul/jquery-ajax-retry/blob/master/LICENSE-MIT"
     }
   ],
+  "peerDependencies": {
+    "jquery": ">=1.5"
+  },
   "dependencies": {
-    "jquery": "~2.1",
     "grunt-contrib-qunit": "~0.5.1",
     "grunt-contrib-concat": "~0.4.0"
   },
