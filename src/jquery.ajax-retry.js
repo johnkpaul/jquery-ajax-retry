@@ -45,7 +45,7 @@
       // whenever we do make this request, pipe its output to our deferred
       function nextRequest() {
         $.ajax(ajaxOptions)
-          .retry({times: times - 1, timeout: opts.timeout})
+          .retry({times: times - 1, timeout: opts.timeout, statusCodes: opts.statusCodes})
           .pipe(output.resolve, output.reject);
       }
 
