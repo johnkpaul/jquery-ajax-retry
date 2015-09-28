@@ -36,6 +36,7 @@ module.exports = function(grunt) {
         eqnull: true,
         browser: true,
         globals: {
+          module: true,
           jQuery: true,
           define: true,
           ok: true,
@@ -70,5 +71,5 @@ module.exports = function(grunt) {
       }
     }, null, "  " ) );
   });
-  
+
 };
