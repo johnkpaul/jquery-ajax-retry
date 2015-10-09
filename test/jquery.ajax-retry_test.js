@@ -270,5 +270,23 @@
                                  '{ "id": 12, "comment": "error!" }');
 
   });
+  
+  asyncTest('ajax options and context are preserved', 4, function() {
+	var testContextObject = { someContext:"forTest" };
+    var def = $.ajax({url:"/test",data:{},type:"POST",context:testContextObject});
+    def.retry({times:2}).then(function(data){
+      ok(data.id === 12);
+	  strictEqual(this, testContextObject);
+      start();
+    });
+    this.requests[0].respond(400, { "Content-Type": "application/json" },
+                                 '{ "id": 13, "comment": "error!" }');
+    this.requests[1].respond(200, { "Content-Type": "application/json" },
+                                 '{ "id": 12, "comment": "Hey there" }');
+
+    ok(this.requests[0].method === 'POST');
+    ok(this.requests[1].method === 'POST');
+
+  });
 
 }(jQuery));
