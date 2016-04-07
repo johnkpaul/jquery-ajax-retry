@@ -27,7 +27,7 @@
       if (opts.statusCodes) {
         this.statusCodes = opts.statusCodes;
       }
-      return this.pipe(null, pipeFailRetry(this, opts));
+      return this.then(null, pipeFailRetry(this, opts));
     };
   });
 
@@ -46,7 +46,7 @@
       function nextRequest() {
         $.ajax(ajaxOptions)
           .retry({times: times - 1, timeout: opts.timeout, statusCodes: opts.statusCodes})
-          .pipe(output.resolve, output.reject);
+          .then(output.resolve, output.reject);
       }
 
       if (times > 1 && (!jqXHR.statusCodes || $.inArray(input.status, jqXHR.statusCodes) > -1)) {
